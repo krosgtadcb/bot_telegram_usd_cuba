@@ -13,7 +13,7 @@ from flask import Flask
 TELEGRAM_TOKEN = "8204621263:AAFWiXWdMH-vvRmGUb91eK45Ill_tJtRVFo"
 CHAT_ID = "-1003728489867"
 
-INTERVALO_MINUTOS = 60
+INTERVALO_MINUTOS = 30
 TIMEOUT_SEGUNDOS = 1
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
@@ -75,7 +75,6 @@ async def enviar_precio_telegram(datos):
         emojis = {"USD":"💵","ZELLE":"📱","MLC":"🏦"}
 
         msg = "💱 <b>TASAS DE CAMBIO - CUBA</b>\n"
-        msg += f"🕒 {datos['fecha']}\n"
         msg += "━━━━━━━━━━━━━━\n"
 
         for moneda, precio in datos["monedas"].items():
