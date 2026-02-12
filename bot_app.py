@@ -114,4 +114,4 @@ if __name__ == "__main__":
     hilo.start()
 
     # Iniciar web simple
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=0.0.0.0)
