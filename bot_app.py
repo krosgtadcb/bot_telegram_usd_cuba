@@ -13,8 +13,8 @@ from flask import Flask
 TELEGRAM_TOKEN = "8204621263:AAFWiXWdMH-vvRmGUb91eK45Ill_tJtRVFo"
 CHAT_ID = "-1003728489867"
 
-INTERVALO_MINUTOS = 60
-TIMEOUT_SEGUNDOS = 0
+INTERVALO_MINUTOS = 30
+TIMEOUT_SEGUNDOS = 1
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -49,11 +49,15 @@ def obtener_precio_eltoque():
 
         patrones = {
             "USD": [r"USD[^0-9]{0,20}(\d{2,4})", r"dólar[^0-9]{0,20}(\d{2,4})"],
-            "EUR": [r"Euro[^0-9]{0,20}(\d{2,4})", r"EUR[^0-9]{0,20}(\d{2,4})"],
             "ZELLE": [r"Zelle[^0-9]{0,20}(\d{2,4})"],
             "MLC": [r"MLC[^0-9]{0,20}(\d{2,4})"]
-            
         }
+
+        # Patrón específico para el Euro - más preciso
+        patron_euro = r"Euro[^\d]*(\d{3})"
+        match_euro = re.search(patron_euro, texto, re.IGNORECASE)
+        if match_euro:
+            datos["monedas"]["EUR"] = int(match_euro.group(1))
 
         for moneda, lista in patrones.items():
             for patron in lista:
@@ -74,7 +78,7 @@ async def enviar_precio_telegram(datos):
     try:
         bot = Bot(token=TELEGRAM_TOKEN)
 
-        emojis = {"USD":"💵", "EUR":"💶","ZELLE":"📱", "MLC":"🏦"}
+        emojis = {"USD":"💵", "ZELLE":"📱", "MLC":"🏦", "EUR":"💶"}
 
         msg = "💱 <b>TASAS DE CAMBIO - CUBA</b>\n"
         msg += "━━━━━━━━━━━━━━\n"
