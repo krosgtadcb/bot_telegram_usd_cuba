@@ -49,9 +49,11 @@ def obtener_precio_eltoque():
 
         patrones = {
             "USD": [r"USD[^0-9]{0,20}(\d{2,4})", r"dólar[^0-9]{0,20}(\d{2,4})"],
+            "EUR": [r"Euro[^0-9]{0,20}(\d{2,4})", r"EUR[^0-9]{0,20}(\d{2,4})"],
             "ZELLE": [r"Zelle[^0-9]{0,20}(\d{2,4})"],
-            "MLC": [r"MLC[^0-9]{0,20}(\d{2,4})"],
-            "EUR": [r"Euro[^0-9]{0,20}(\d{2,4})", r"EUR[^0-9]{0,20}(\d{2,4})"]
+            
+            "MLC": [r"MLC[^0-9]{0,20}(\d{2,4})"]
+            
         }
 
         for moneda, lista in patrones.items():
@@ -73,7 +75,7 @@ async def enviar_precio_telegram(datos):
     try:
         bot = Bot(token=TELEGRAM_TOKEN)
 
-        emojis = {"USD":"💵", "ZELLE":"📱", "MLC":"🏦", "EUR":"💶"}
+        emojis = {"USD":"💵", "EUR":"💶","ZELLE":"📱", "MLC":"🏦"}
 
         msg = "💱 <b>TASAS DE CAMBIO - CUBA</b>\n"
         msg += "━━━━━━━━━━━━━━\n"
