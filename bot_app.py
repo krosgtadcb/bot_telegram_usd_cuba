@@ -13,7 +13,7 @@ from flask import Flask
 TELEGRAM_TOKEN = "8204621263:AAFWiXWdMH-vvRmGUb91eK45Ill_tJtRVFo"
 CHAT_ID = "-1003728489867"
 
-INTERVALO_MINUTOS = 30
+INTERVALO_MINUTOS = 1
 TIMEOUT_SEGUNDOS = 1
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
@@ -50,7 +50,8 @@ def obtener_precio_eltoque():
         patrones = {
             "USD": [r"USD[^0-9]{0,20}(\d{2,4})", r"dólar[^0-9]{0,20}(\d{2,4})"],
             "ZELLE": [r"Zelle[^0-9]{0,20}(\d{2,4})"],
-            "MLC": [r"MLC[^0-9]{0,20}(\d{2,4})"]
+            "MLC": [r"MLC[^0-9]{0,20}(\d{2,4})"],
+            "EUR": [r"Euro[^0-9]{0,20}(\d{2,4})", r"EUR[^0-9]{0,20}(\d{2,4})"]
         }
 
         for moneda, lista in patrones.items():
@@ -72,7 +73,7 @@ async def enviar_precio_telegram(datos):
     try:
         bot = Bot(token=TELEGRAM_TOKEN)
 
-        emojis = {"USD":"💵","ZELLE":"📱","MLC":"🏦"}
+        emojis = {"USD":"💵", "ZELLE":"📱", "MLC":"🏦", "EUR":"💶"}
 
         msg = "💱 <b>TASAS DE CAMBIO - CUBA</b>\n"
         msg += "━━━━━━━━━━━━━━\n"
@@ -82,8 +83,13 @@ async def enviar_precio_telegram(datos):
 
         msg += "━━━━━━━━━━━━━━\n📊 Fuente: elToque.com"
 
-        await bot.send_message(chat_id=CHAT_ID, text=msg, parse_mode="HTML")
-        logger.info("Mensaje enviado a Telegram")
+        # Enviar mensaje
+        sent_message = await bot.send_message(chat_id=CHAT_ID, text=msg, parse_mode="HTML")
+        
+        # Fijar el mensaje en el grupo
+        await bot.pin_chat_message(chat_id=CHAT_ID, message_id=sent_message.message_id)
+        
+        logger.info("Mensaje enviado y fijado en Telegram")
 
     except Exception as e:
         logger.error(f"Error enviando a Telegram: {e}")
