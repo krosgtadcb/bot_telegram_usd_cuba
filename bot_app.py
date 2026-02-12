@@ -13,7 +13,7 @@ from flask import Flask
 TELEGRAM_TOKEN = "8204621263:AAFWiXWdMH-vvRmGUb91eK45Ill_tJtRVFo"
 CHAT_ID = "-1003728489867"
 
-INTERVALO_MINUTOS = 5
+INTERVALO_MINUTOS = 50
 TIMEOUT_SEGUNDOS = 15
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
